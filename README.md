@@ -2,7 +2,7 @@
 
 > Luxury Wedding Planning & Event Management in Bengaluru and Mysuru.
 
-Website built for **Weddings by Harsha**, featuring a modern pastel & champagne gold aesthetic, direct warehouse & godown inventory advantage, interactive wedding budget estimator, filterable portfolio lightbox, local SEO engine for 12 key corridors in Bengaluru & Mysuru, and direct WhatsApp integrations.
+Website built for **Weddings by Harsha**, featuring a modern pastel & champagne gold aesthetic, direct warehouse & godown inventory advantage, filterable portfolio lightbox, local SEO engine for 12 key corridors in Bengaluru & Mysuru, and direct WhatsApp integrations.
 
 ---
 
@@ -10,7 +10,6 @@ Website built for **Weddings by Harsha**, featuring a modern pastel & champagne 
 
 - **Luxury Pastel Aesthetic**: Curated color palette (Warm Ivory, Blush, Champagne Gold, Soft Sage) with Playfair Display & Plus Jakarta Sans typography.
 - **Direct Godown Inventory**: Highlights the in-house warehouse in Kasthuriba Nagar / Azad Nagar, Bengaluru for stage fabrication, aluminum trussing, and acoustics.
-- **Interactive Wedding Cost Estimator**: Real-time pricing calculator for guests (50–2,500), event types, and services with 1-click WhatsApp quotation generator.
 - **Filterable Portfolio Gallery**: Responsive masonry layout with modal Lightbox for Mandaps, Royal Gardens, Traditional Pandals, Receptions, and Corporate events.
 - **Areas We Serve (Local SEO)**: Dynamic locality explorer for Kengeri, Whitefield, Marathahalli, Jayanagar, BTM, Electronic City, Hebbal, Yelahanka, Majestic, Yeshwanthpur, Bommasandra, and Mysuru Palaces.
 - **Streamlined Navigation**: Clean header with Home, About Us, Services (nested dropdown), and Contact.

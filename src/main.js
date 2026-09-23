@@ -6,9 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStickyHeader();
   initMobileNav();
   initPortfolio();
-  initBudgetEstimator();
   initAreaTabs();
-  initChecklistModal();
   initContactForm();
 });
 
@@ -264,102 +262,7 @@ function initPortfolio() {
 }
 
 /* ==========================================================================
-   6. Interactive Wedding Budget & Cost Estimator
-   ========================================================================== */
-function initBudgetEstimator() {
-  const guestSlider = document.getElementById('guest-slider');
-  const guestBadge = document.getElementById('guest-count-badge');
-  const radioButtons = document.querySelectorAll('input[name="event-type"]');
-  const checkboxes = document.querySelectorAll('.checkbox-pill input[type="checkbox"]');
-  const locationSelect = document.getElementById('calc-location-select');
-
-  const minPriceEl = document.getElementById('calc-min-price');
-  const maxPriceEl = document.getElementById('calc-max-price');
-  const summaryEventText = document.getElementById('summary-event-text');
-  const summaryGuestText = document.getElementById('summary-guest-text');
-  const summaryServicesCount = document.getElementById('summary-services-count');
-  const summaryLocationText = document.getElementById('summary-location-text');
-  const btnWhatsApp = document.getElementById('btn-whatsapp-estimate');
-
-  if (!guestSlider || !minPriceEl || !maxPriceEl) return;
-
-  function calculateEstimate() {
-    const guests = parseInt(guestSlider.value, 10);
-    if (guestBadge) guestBadge.textContent = `${guests} Guests`;
-    if (summaryGuestText) summaryGuestText.textContent = `${guests} Guests`;
-
-    let selectedEventType = 'Full Wedding & Reception';
-    radioButtons.forEach((radio) => {
-      if (radio.checked) selectedEventType = radio.value;
-    });
-    if (summaryEventText) summaryEventText.textContent = selectedEventType;
-
-    // Multipliers for event types
-    const eventMultipliers = {
-      'Full Wedding & Reception': 1.0,
-      'Mandap & Muhurtham Only': 0.55,
-      'Engagement / Sangeet Night': 0.45,
-      'Royal Destination Wedding': 1.35
-    };
-    const multiplier = eventMultipliers[selectedEventType] || 1.0;
-
-    // Service costs
-    const serviceCosts = {
-      'svc-decor': 140000,
-      'svc-light': 60000,
-      'svc-photo': 75000,
-      'svc-coord': 35000,
-      'svc-pandal': 55000,
-      'svc-hosp': 30000
-    };
-
-    let selectedServices = [];
-    let servicesTotal = 0;
-
-    checkboxes.forEach((cb) => {
-      if (cb.checked) {
-        servicesTotal += serviceCosts[cb.id] || 30000;
-        selectedServices.push(cb.value);
-      }
-    });
-
-    if (summaryServicesCount) {
-      summaryServicesCount.textContent = `${selectedServices.length} Services Selected`;
-    }
-
-    if (locationSelect && summaryLocationText) {
-      const locName = locationSelect.options[locationSelect.selectedIndex].text;
-      summaryLocationText.textContent = locName.split(' - ')[1] || locName.split(' (')[0];
-    }
-
-    const guestLogisticsFactor = guests * 380;
-    const subtotal = (servicesTotal + guestLogisticsFactor) * multiplier;
-
-    const minEstimate = Math.round((subtotal * 0.88) / 5000) * 5000;
-    const maxEstimate = Math.round((subtotal * 1.22) / 5000) * 5000;
-
-    minPriceEl.textContent = Number(minEstimate).toLocaleString('en-IN');
-    maxPriceEl.textContent = Number(maxEstimate).toLocaleString('en-IN');
-
-    // Update WhatsApp link
-    if (btnWhatsApp) {
-      btnWhatsApp.onclick = () => {
-        const msg = `Namaskara Harsha! I used your online Wedding Budget Estimator.%0A%0A*Event Details:*%0A• Celebration: ${encodeURIComponent(selectedEventType)}%0A• Expected Guests: ${guests}%0A• Location: ${encodeURIComponent(summaryLocationText ? summaryLocationText.textContent : 'Bengaluru')}%0A• Services (${selectedServices.length}): ${encodeURIComponent(selectedServices.join(', '))}%0A• Estimated Range: ₹${minPriceEl.textContent} - ₹${maxPriceEl.textContent}%0A%0ACould we schedule a visit to your Kasthuriba Nagar godown to discuss the dates and decor themes?`;
-        window.open(`https://wa.me/919108619752?text=${msg}`, '_blank');
-      };
-    }
-  }
-
-  guestSlider.addEventListener('input', calculateEstimate);
-  radioButtons.forEach((r) => r.addEventListener('change', calculateEstimate));
-  checkboxes.forEach((cb) => cb.addEventListener('change', calculateEstimate));
-  if (locationSelect) locationSelect.addEventListener('change', calculateEstimate);
-
-  calculateEstimate();
-}
-
-/* ==========================================================================
-   7. Local SEO Areas We Serve Switcher
+   6. Local SEO Areas We Serve Switcher
    ========================================================================== */
 function initAreaTabs() {
   const localityButtons = document.querySelectorAll('.locality-nav-scroll .locality-btn');
@@ -381,7 +284,7 @@ function initAreaTabs() {
       desc: 'Kengeri offers a vibrant mix of grand traditional kalyana mantapas and modern convention halls along the Mysuru Road expressway, making it ideal for family-centric weddings with effortless highway connectivity. Weddings by Harsha manages custom floral mandaps, catering logistics, and guest shuttles for Kengeri venues with rapid response from our nearby warehouse.',
       venues: 'Kalyana mantapas, open lawn venues, traditional South Indian theme pandals',
       advantage: 'Just 15-20 mins via Mysore Road from our Kasthuriba Nagar godown',
-      img: '/assets/IMG_9145.JPG.jpeg',
+      img: '/assets/Weddings/IMG_9135.JPG.jpeg',
       caption: 'Weddings by Harsha • Kengeri Mandap Setup'
     },
     'whitefield': {
@@ -390,7 +293,7 @@ function initAreaTabs() {
       desc: 'Crafting royal, sleek, and modern celebrations at five-star hotels and luxury lawns across Whitefield and East Bengaluru. From high-tech intelligent lighting to bespoke floral canopies for cosmopolitan couples.',
       venues: 'Five-star hotel ballrooms (Sheraton, Marriott, Palm Meadows lawns)',
       advantage: 'Experienced rigging team with intelligent moving heads & LED walls',
-      img: '/assets/IMG_9135.JPG.jpeg',
+      img: '/assets/Weddings/IMG_9133.JPG.jpeg',
       caption: 'Weddings by Harsha • Whitefield Ballroom Production'
     },
     'marathahalli': {
@@ -399,7 +302,7 @@ function initAreaTabs() {
       desc: 'Seamless decor and production for wedding halls, tech-park clubhouses, and banquet spaces around Outer Ring Road and Marathahalli. Complete audio-visual rigs and stage backdrops at honest factory rates.',
       venues: 'Convention centers, tech-park clubhouses, banquet halls',
       advantage: 'Direct transport from godown with overnight stage turnover',
-      img: '/assets/IMG_8170.JPG.jpeg',
+      img: '/assets/HouseWarming/IMG_8170.JPG.jpeg',
       caption: 'Weddings by Harsha • Marathahalli Stage Setup'
     },
     'jayanagar': {
@@ -408,7 +311,7 @@ function initAreaTabs() {
       desc: 'Rooted in Karnataka tradition. We design breathtaking authentic areca leaf, coconut frond, and fragrant mogra mandaps for traditional Kalyana Mantapas across South Bangalore.',
       venues: 'Historic Kalyana Mantapas, heritage community centers, temple halls',
       advantage: 'Own inventory of pure brass urns, traditional bells, and temple fabrics',
-      img: '/assets/IMG_9145.JPG.jpeg',
+      img: '/assets/Cradle&Naming/IMG_9145.JPG.jpeg',
       caption: 'Weddings by Harsha • Jayanagar Heritage Mandap'
     },
     'btm': {
@@ -417,7 +320,7 @@ function initAreaTabs() {
       desc: 'Compact or grand, our team brings tailored decor packages for banquets, terrace parties, and intimate marriage halls throughout BTM 1st & 2nd Stage.',
       venues: 'Boutique banquets, rooftop wedding terraces, mid-sized halls',
       advantage: 'Space-saving modular stage designs and customized photo corners',
-      img: '/assets/IMG_9133.JPG.jpeg',
+      img: '/assets/Weddings/IMG_5408.JPG.jpeg',
       caption: 'Weddings by Harsha • BTM Layout Reception Décor'
     },
     'electronic-city': {
@@ -426,7 +329,7 @@ function initAreaTabs() {
       desc: 'Specializing in open-air fairytale decor across Hosur Road, Electronic City Phase 1 & 2, and lush suburban garden resorts. Our in-house sound systems and weather-proof pandals withstand outdoor elements effortlessly.',
       venues: 'Open-air garden resorts, farmhouse estates, poolside lawns',
       advantage: 'Heavy aluminum box trusses for large weather-safe canopies',
-      img: '/assets/WhatsApp Image 2026-09-23 at 12.00.41 PM.jpeg',
+      img: '/assets/Clients&Vips/WhatsApp Image 2026-09-23 at 12.00.41 PM.jpeg',
       caption: 'Weddings by Harsha • Open-Lawn Resort Styling'
     },
     'hebbal': {
@@ -435,7 +338,7 @@ function initAreaTabs() {
       desc: 'Serving prestigious venues across Bellary Road, Hebbal, and Palace Grounds gates. Harsha’s team handles colossal 100ft+ stage fabrication, aluminum trussing, and mega banquet coordination.',
       venues: 'Palace Grounds (Sheesh Mahal, Gayatri Vihar, King Court), luxury lake resorts',
       advantage: 'Equipped to construct 100ft+ mega stages and VIP green rooms',
-      img: '/assets/IMG_9138.JPG.jpeg',
+      img: '/assets/Corporate&College/IMG_5174.JPG.jpeg',
       caption: 'Weddings by Harsha • Hebbal & Palace Grounds Mega Rig'
     },
     'yelahanka': {
@@ -444,7 +347,7 @@ function initAreaTabs() {
       desc: 'Designing rustic-chic and royal outdoor weddings at private farmhouses and luxury estates surrounding Yelahanka and the Airport highway.',
       venues: 'Private farmhouse estates, luxury villa communities, amphitheaters',
       advantage: 'Bespoke pampas grass, warm fairy-light canopies, and cocktail bars',
-      img: '/assets/WhatsApp Image 2026-09-23 at 12.00.43 PM.jpeg',
+      img: '/assets/Clients&Vips/WhatsApp Image 2026-09-23 at 12.00.43 PM.jpeg',
       caption: 'Weddings by Harsha • Yelahanka Sunset Ceremony'
     },
     'majestic': {
@@ -453,7 +356,7 @@ function initAreaTabs() {
       desc: 'Historic Kalyana Mantapas around Majestic, Gandhinagar, and Rajajinagar receive the pinnacle of our attention with timeless floral craftsmanship and live Nadaswaram coordination.',
       venues: 'Traditional choultries, community wedding mantapas',
       advantage: 'Rapid logistics turnaround in central Bangalore',
-      img: '/assets/IMG_9145.JPG.jpeg',
+      img: '/assets/HouseWarming/IMG_9119.JPG.jpeg',
       caption: 'Weddings by Harsha • Central Bangalore Auspicious Mandap'
     },
     'yeshwanthpur': {
@@ -462,7 +365,7 @@ function initAreaTabs() {
       desc: 'Equipped to furnish mega venues around Yeshwanthpur and Tumkur Road with 4K LED screens, acoustic line arrays, and grand bride/groom entry pathways.',
       venues: 'Mega convention centers and multi-level banquet complexes',
       advantage: 'Capacity to handle 2,500+ guests with synchronized catering flow',
-      img: '/assets/IMG_8169.JPG.jpeg',
+      img: '/assets/Corporate&College/IMG_5170.JPG.jpeg',
       caption: 'Weddings by Harsha • Grand Convocation & Wedding Stage'
     },
     'bommasandra': {
@@ -471,7 +374,7 @@ function initAreaTabs() {
       desc: 'Providing budget-friendly, high-impact wedding setups for community halls, industrial clubhouses, and destination lawns along South Hosur Road.',
       venues: 'Community marriage halls and suburban garden plots',
       advantage: 'Complete packages including sound, photography, and mandap flowers',
-      img: '/assets/IMG_9135.JPG.jpeg',
+      img: '/assets/Weddings/IMG_9137.JPG.jpeg',
       caption: 'Weddings by Harsha • Bommasandra Stage Fabrications'
     },
     'mysuru': {
@@ -480,7 +383,7 @@ function initAreaTabs() {
       desc: 'From royal heritage arches overlooking Chamundi Hills to grand banquets near Lalitha Mahal and Mysore Palace. Harsha’s full logistics fleet travels to Mysuru with zero middleman commissions.',
       venues: 'Lalitha Mahal Palace, Silent Shores, Windflower, Chamundi Hill lawns',
       advantage: 'Dedicated transport fleet via Bengaluru-Mysuru Expressway with zero vendor markup',
-      img: '/assets/WhatsApp Image 2026-09-23 at 12.00.42 PM.jpeg',
+      img: '/assets/Weddings/IMG_9141.JPG.jpeg',
       caption: 'Weddings by Harsha • Mysuru Palace Royal Celebration'
     }
   };
@@ -511,48 +414,7 @@ function initAreaTabs() {
 }
 
 /* ==========================================================================
-   8. Free 2026 Checklist Lead Magnet Modal
-   ========================================================================== */
-function initChecklistModal() {
-  const openBtn = document.getElementById('btn-open-checklist-modal');
-  const modal = document.getElementById('checklist-modal');
-  const closeBtn = document.getElementById('checklist-close');
-  const overlay = document.getElementById('checklist-modal-overlay');
-
-  if (!modal) return;
-
-  function openModal() {
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.6 },
-      colors: ['#E2BF63', '#C59B27', '#F6EFEA']
-    });
-  }
-
-  function closeModal() {
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  if (openBtn) openBtn.addEventListener('click', openModal);
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (overlay) overlay.addEventListener('click', closeModal);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      closeModal();
-    }
-  });
-}
-
-/* ==========================================================================
-   9. Main Consultation Lead Form
+   7. Main Consultation Lead Form
    ========================================================================== */
 function initContactForm() {
   const form = document.getElementById('lead-inquiry-form');
