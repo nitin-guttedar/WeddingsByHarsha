@@ -1,247 +1,330 @@
 import confetti from 'canvas-confetti';
 
 document.addEventListener('DOMContentLoaded', () => {
-  initAmbientCanvas();
-  initLiveHours();
-  initStickyHeader();
-  initMobileNav();
-  initPortfolio();
-  initAreaTabs();
+  initPreloader();
+  initRouter();
+  initNavbarScrolled();
+  initMobileMenu();
+  initHeroSlider();
+  initIntroVideo();
+  initParallaxDestinations();
+  initGalleryAndLightbox();
   initContactForm();
 });
 
 /* ==========================================================================
-   1. Ambient Canvas — Golden Shimmer & Petals
+   1. ROYAL PRELOADER (1.4s Timer with Auto-Dismissal)
    ========================================================================== */
-function initAmbientCanvas() {
-  const canvas = document.getElementById('ambient-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+function initPreloader() {
+  const preloader = document.getElementById('preloader');
+  if (!preloader) return;
 
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  function dismissPreloader() {
+    preloader.classList.add('preloader-hidden');
+    document.body.classList.remove('preloader-active');
+    setTimeout(() => {
+      preloader.style.display = 'none';
+    }, 800);
+  }
 
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+  // Dismiss after royal reveal animation
+  setTimeout(dismissPreloader, 1400);
+
+  // User click on preloader dismisses immediately
+  preloader.addEventListener('click', dismissPreloader);
+
+  // Safety fallback if page load or timer delays
+  window.addEventListener('load', () => {
+    setTimeout(dismissPreloader, 1600);
+  });
+}
+
+/* ==========================================================================
+   2. CLIENT-SIDE SPA ROUTER (Home, About, Services, Gallery, Areas, Blog, Contact)
+   ========================================================================== */
+function initRouter() {
+  const views = {
+    '/': document.getElementById('view-home'),
+    '/about': document.getElementById('view-about'),
+    '/services': document.getElementById('view-services'),
+    '/gallery': document.getElementById('view-gallery'),
+    '/areas': document.getElementById('view-areas'),
+    '/blog': document.getElementById('view-blog'),
+    '/contact': document.getElementById('view-contact')
+  };
+
+  const navLinks = document.querySelectorAll('[data-route]');
+
+  function navigateTo(route) {
+    const cleanRoute = views[route] ? route : '/';
+
+    // Switch view
+    Object.keys(views).forEach((key) => {
+      const view = views[key];
+      if (view) {
+        if (key === cleanRoute) {
+          view.classList.add('active');
+        } else {
+          view.classList.remove('active');
+        }
+      }
+    });
+
+    // Update active nav links
+    navLinks.forEach((link) => {
+      if (link.getAttribute('data-route') === cleanRoute) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu if open
+    const mobileOverlay = document.getElementById('mobile-menu-overlay');
+    if (mobileOverlay) mobileOverlay.classList.remove('open');
+
+    // Scroll to top with instantaneous behavior like Lenis
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+
+  function handleRoute() {
+    let hash = window.location.hash.replace(/^#/, '');
+    if (!hash || hash === '') hash = '/';
+    navigateTo(hash);
+  }
+
+  // Intercept route clicks
+  document.addEventListener('click', (e) => {
+    const targetLink = e.target.closest('[data-route]');
+    if (targetLink) {
+      e.preventDefault();
+      const route = targetLink.getAttribute('data-route');
+      
+      // If user clicked an area specific CTA button, pre-select that area in the contact form
+      const areaSelect = targetLink.getAttribute('data-area-select');
+      if (areaSelect) {
+        const areaDropdown = document.getElementById('lead-area');
+        if (areaDropdown) {
+          areaDropdown.value = areaSelect;
+        }
+      }
+
+      window.location.hash = '#' + route;
+      navigateTo(route);
+    }
   });
 
-  const particles = [];
-  const particleCount = window.innerWidth < 768 ? 20 : 45;
+  window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('popstate', handleRoute);
 
-  for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 3.5 + 1.2,
-      speedX: (Math.random() - 0.5) * 0.4,
-      speedY: Math.random() * 0.6 + 0.3,
-      opacity: Math.random() * 0.5 + 0.2,
-      rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 1.5,
-      isPetal: Math.random() > 0.4
+  // Initial Route Load
+  handleRoute();
+}
+
+/* ==========================================================================
+   3. STICKY NAVBAR SCROLLED STATE
+   ========================================================================== */
+function initNavbarScrolled() {
+  const navbar = document.getElementById('main-navbar');
+  if (!navbar) return;
+
+  function onScroll() {
+    if (window.scrollY > 40) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+/* ==========================================================================
+   4. MOBILE DRAWER MENU
+   ========================================================================== */
+function initMobileMenu() {
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('mobile-menu-overlay');
+
+  if (!toggleBtn || !overlay) return;
+
+  toggleBtn.addEventListener('click', () => {
+    overlay.classList.toggle('open');
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+    }
+  });
+}
+
+/* ==========================================================================
+   5. HOME HERO IMAGE SLIDER
+   ========================================================================== */
+function initHeroSlider() {
+  const slides = document.querySelectorAll('#hero-slider .hero-bg-slide');
+  if (!slides.length) return;
+
+  let currentIndex = 0;
+
+  setInterval(() => {
+    slides[currentIndex].classList.remove('active');
+    currentIndex = (currentIndex + 1) % slides.length;
+    slides[currentIndex].classList.add('active');
+  }, 5000);
+}
+
+/* ==========================================================================
+   6. SIGNATURE INTRO VIDEO CONTROLS
+   ========================================================================== */
+function initIntroVideo() {
+  const video = document.getElementById('intro-feature-video');
+  const toggleBtn = document.getElementById('intro-sound-toggle');
+  const icon = document.getElementById('intro-sound-icon');
+  const text = document.getElementById('intro-sound-text');
+
+  if (!video) return;
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      if (video.muted) {
+        if (icon) icon.textContent = '🔇';
+        if (text) text.textContent = 'Unmute Sound';
+      } else {
+        if (icon) icon.textContent = '🔊';
+        if (text) text.textContent = 'Mute Sound';
+      }
     });
   }
 
-  function render() {
-    ctx.clearRect(0, 0, width, height);
-
-    for (let p of particles) {
-      p.x += p.speedX;
-      p.y += p.speedY;
-      p.rotation += p.rotSpeed;
-
-      if (p.y > height + 20) {
-        p.y = -10;
-        p.x = Math.random() * width;
-      }
-      if (p.x > width + 20) p.x = -10;
-      if (p.x < -20) p.x = width + 10;
-
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate((p.rotation * Math.PI) / 180);
-
-      if (p.isPetal) {
-        ctx.fillStyle = `rgba(224, 185, 122, ${p.opacity})`;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size * 2, p.size, Math.PI / 4, 0, 2 * Math.PI);
-        ctx.fill();
-      } else {
-        ctx.fillStyle = `rgba(197, 155, 39, ${p.opacity * 0.8})`;
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size * 0.8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-
-    requestAnimationFrame(render);
+  // Optimize performance: pause video when scrolled away
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (video.paused) video.play().catch(() => {});
+        } else {
+          if (!video.paused) video.pause();
+        }
+      });
+    }, { threshold: 0.15 });
+    observer.observe(video);
   }
-
-  render();
 }
 
 /* ==========================================================================
-   2. Live Operating Hours (9:00 AM - 9:00 PM IST)
+   7. DESTINATIONS PARALLAX DUAL-RAIL TRACK
    ========================================================================== */
-function initLiveHours() {
-  const statusElem = document.getElementById('business-status-text');
-  if (!statusElem) return;
+function initParallaxDestinations() {
+  const section = document.getElementById('destinations-parallax');
+  const rowTop = document.getElementById('dest-row-top');
+  const rowBottom = document.getElementById('dest-row-bottom');
 
-  function updateStatus() {
-    const now = new Date();
-    const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
-    const istOffset = 5.5 * 3600000;
-    const istDate = new Date(utcTime + istOffset);
+  if (!section || !rowTop || !rowBottom) return;
 
-    const hours = istDate.getHours();
-    const isOpen = hours >= 9 && hours < 21;
+  let ticking = false;
 
-    if (isOpen) {
-      statusElem.textContent = 'Open Today: 9:00 AM – 9:00 PM (Kasthuriba Nagar Godown Consultations)';
-    } else {
-      statusElem.textContent = 'Opens 9:00 AM Tomorrow • 24/7 WhatsApp Consultations Active';
+  function updateParallax() {
+    const rect = section.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if (rect.bottom > -100 && rect.top < windowHeight + 100) {
+      const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+      const moveTop = (progress - 0.5) * 180;
+      const moveBottom = (0.5 - progress) * 180;
+
+      rowTop.style.transform = `translateX(${moveTop}px)`;
+      rowBottom.style.transform = `translateX(${moveBottom}px)`;
     }
+    ticking = false;
   }
-
-  updateStatus();
-  setInterval(updateStatus, 60000);
-}
-
-/* ==========================================================================
-   3. Sticky Header
-   ========================================================================== */
-function initStickyHeader() {
-  const header = document.getElementById('site-header');
-  if (!header) return;
 
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
     }
-  });
+  }, { passive: true });
 }
 
 /* ==========================================================================
-   4. Mobile Navigation Drawer
+   8. ROYAL GALLERY FILTERS & FULLSCREEN VIDEO/IMAGE LIGHTBOX (XK)
    ========================================================================== */
-function initMobileNav() {
-  const menuToggle = document.getElementById('menu-toggle');
-  const mobileDrawer = document.getElementById('mobile-drawer');
-  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
-
-  if (!menuToggle || !mobileDrawer) return;
-
-  // Create a backdrop element dynamically if it doesn't exist
-  let backdrop = document.querySelector('.drawer-backdrop');
-  if (!backdrop) {
-    backdrop = document.createElement('div');
-    backdrop.className = 'drawer-backdrop';
-    document.body.appendChild(backdrop);
-  }
-
-  function openDrawer() {
-    mobileDrawer.classList.add('active');
-    backdrop.classList.add('active');
-    menuToggle.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeDrawer() {
-    mobileDrawer.classList.remove('active');
-    backdrop.classList.remove('active');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  menuToggle.addEventListener('click', () => {
-    const isOpen = mobileDrawer.classList.contains('active');
-    if (isOpen) {
-      closeDrawer();
-    } else {
-      openDrawer();
-    }
-  });
-
-  backdrop.addEventListener('click', closeDrawer);
-
-  const allDrawerLinks = document.querySelectorAll('.mobile-nav-link, .mobile-subnav-link');
-  allDrawerLinks.forEach((link) => {
-    link.addEventListener('click', closeDrawer);
-  });
-}
-
-/* ==========================================================================
-   5. Portfolio Gallery Filter & Lightbox
-   ========================================================================== */
-function initPortfolio() {
-  const filterTabs = document.querySelectorAll('.gallery-filter-bar .filter-tab');
-  const galleryItems = document.querySelectorAll('.gallery-masonry-grid .gallery-item');
+function initGalleryAndLightbox() {
+  const filterBtns = document.querySelectorAll('#gallery-filter-tabs .filter-btn');
+  const galleryItems = document.querySelectorAll('#main-gallery-grid .gallery-item');
   const lightboxModal = document.getElementById('lightbox-modal');
   const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxCaption = document.getElementById('lightbox-caption');
+  const lightboxVideo = document.getElementById('lightbox-video');
+  const lightboxTitle = document.getElementById('lightbox-title');
+  const lightboxCategory = document.getElementById('lightbox-category');
   const lightboxClose = document.getElementById('lightbox-close');
 
-  // Filter tabs
-  filterTabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      filterTabs.forEach((t) => {
-        t.classList.remove('active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
+  // Filter Buttons
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
 
-      const filter = tab.dataset.filter;
+      const filter = btn.getAttribute('data-filter');
 
       galleryItems.forEach((item) => {
-        const category = item.dataset.category;
-        if (filter === 'all' || category === filter) {
-          item.classList.remove('hidden');
+        const categories = (item.getAttribute('data-category') || '').split(' ');
+        if (filter === 'all' || categories.includes(filter)) {
+          item.style.display = '';
         } else {
-          item.classList.add('hidden');
+          item.style.display = 'none';
         }
       });
     });
   });
 
-  // Lightbox opening
-  const zoomBtns = document.querySelectorAll('.btn-zoom');
-  zoomBtns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const src = btn.dataset.src;
-      const caption = btn.dataset.caption || 'Weddings by Harsha Portfolio';
+  function openLightbox(type, src, title, category) {
+    if (!lightboxModal) return;
 
-      if (lightboxModal && lightboxImg) {
+    if (type === 'video') {
+      if (lightboxImg) lightboxImg.style.display = 'none';
+      if (lightboxVideo) {
+        lightboxVideo.style.display = 'block';
+        lightboxVideo.src = src;
+        lightboxVideo.muted = false;
+        lightboxVideo.play().catch(() => {});
+      }
+    } else {
+      if (lightboxVideo) {
+        lightboxVideo.pause();
+        lightboxVideo.style.display = 'none';
+        lightboxVideo.src = '';
+      }
+      if (lightboxImg) {
+        lightboxImg.style.display = 'block';
         lightboxImg.src = src;
-        lightboxImg.alt = caption;
-        if (lightboxCaption) lightboxCaption.textContent = caption;
-        lightboxModal.classList.add('active');
-        lightboxModal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        lightboxImg.alt = title || 'Weddings by Harsha Portfolio';
       }
-    });
-  });
+    }
 
-  // Also clicking any gallery card opens lightbox
-  const galleryCards = document.querySelectorAll('.gallery-card');
-  galleryCards.forEach((card) => {
-    card.addEventListener('click', () => {
-      const img = card.querySelector('img');
-      const title = card.querySelector('.gallery-item-title') ? card.querySelector('.gallery-item-title').textContent : '';
+    if (lightboxTitle) lightboxTitle.textContent = title || 'Weddings by Harsha Event';
+    if (lightboxCategory) lightboxCategory.textContent = category || 'Royal Portfolio';
 
-      if (lightboxModal && lightboxImg && img) {
-        lightboxImg.src = img.src;
-        lightboxImg.alt = title;
-        if (lightboxCaption) lightboxCaption.textContent = title;
-        lightboxModal.classList.add('active');
-        lightboxModal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-      }
+    lightboxModal.classList.add('active');
+    lightboxModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Clicking any gallery card
+  galleryItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      const type = item.getAttribute('data-type') || 'image';
+      const src = item.getAttribute('data-src');
+      const title = item.getAttribute('data-title');
+      const category = item.getAttribute('data-cat-name');
+      openLightbox(type, src, title, category);
     });
   });
 
@@ -250,6 +333,10 @@ function initPortfolio() {
       lightboxModal.classList.remove('active');
       lightboxModal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      if (lightboxVideo) {
+        lightboxVideo.pause();
+        lightboxVideo.src = '';
+      }
     }
   }
 
@@ -259,199 +346,74 @@ function initPortfolio() {
       if (e.target === lightboxModal) closeLightbox();
     });
   }
-}
 
-/* ==========================================================================
-   6. Local SEO Areas We Serve Switcher
-   ========================================================================== */
-function initAreaTabs() {
-  const localityButtons = document.querySelectorAll('.locality-nav-scroll .locality-btn');
-  const localityBadge = document.getElementById('locality-badge');
-  const localityTitle = document.getElementById('locality-title');
-  const localityDesc = document.getElementById('locality-desc');
-  const localityVenues = document.getElementById('locality-venues');
-  const localityAdvantage = document.getElementById('locality-advantage');
-  const localityCtaBtn = document.getElementById('locality-cta-btn');
-  const localityImg = document.getElementById('locality-img');
-  const localityImgCaption = document.getElementById('locality-img-caption');
-
-  if (!localityButtons.length || !localityTitle) return;
-
-  const areaData = {
-    'kengeri': {
-      zone: 'Bengaluru South-West Zone',
-      title: 'Wedding Planners in Kengeri, Bengaluru',
-      desc: 'Kengeri offers a vibrant mix of grand traditional kalyana mantapas and modern convention halls along the Mysuru Road expressway, making it ideal for family-centric weddings with effortless highway connectivity. Weddings by Harsha manages custom floral mandaps, catering logistics, and guest shuttles for Kengeri venues with rapid response from our nearby warehouse.',
-      venues: 'Kalyana mantapas, open lawn venues, traditional South Indian theme pandals',
-      advantage: 'Just 15-20 mins via Mysore Road from our Kasthuriba Nagar godown',
-      img: '/assets/Weddings/IMG_9135.JPG.jpeg',
-      caption: 'Weddings by Harsha • Kengeri Mandap Setup'
-    },
-    'whitefield': {
-      zone: 'Bengaluru East Tech Corridor',
-      title: 'Luxury Weddings & Receptions in Whitefield & ITPL',
-      desc: 'Crafting royal, sleek, and modern celebrations at five-star hotels and luxury lawns across Whitefield and East Bengaluru. From high-tech intelligent lighting to bespoke floral canopies for cosmopolitan couples.',
-      venues: 'Five-star hotel ballrooms (Sheraton, Marriott, Palm Meadows lawns)',
-      advantage: 'Experienced rigging team with intelligent moving heads & LED walls',
-      img: '/assets/Weddings/IMG_9133.JPG.jpeg',
-      caption: 'Weddings by Harsha • Whitefield Ballroom Production'
-    },
-    'marathahalli': {
-      zone: 'Bengaluru Outer Ring Road Corridor',
-      title: 'Grand Weddings & Haldi Events in Marathahalli',
-      desc: 'Seamless decor and production for wedding halls, tech-park clubhouses, and banquet spaces around Outer Ring Road and Marathahalli. Complete audio-visual rigs and stage backdrops at honest factory rates.',
-      venues: 'Convention centers, tech-park clubhouses, banquet halls',
-      advantage: 'Direct transport from godown with overnight stage turnover',
-      img: '/assets/HouseWarming/IMG_8170.JPG.jpeg',
-      caption: 'Weddings by Harsha • Marathahalli Stage Setup'
-    },
-    'jayanagar': {
-      zone: 'South Bengaluru Cultural Heart',
-      title: 'Heritage & Traditional Weddings in Jayanagar & Basavanagudi',
-      desc: 'Rooted in Karnataka tradition. We design breathtaking authentic areca leaf, coconut frond, and fragrant mogra mandaps for traditional Kalyana Mantapas across South Bangalore.',
-      venues: 'Historic Kalyana Mantapas, heritage community centers, temple halls',
-      advantage: 'Own inventory of pure brass urns, traditional bells, and temple fabrics',
-      img: '/assets/Cradle&Naming/IMG_9145.JPG.jpeg',
-      caption: 'Weddings by Harsha • Jayanagar Heritage Mandap'
-    },
-    'btm': {
-      zone: 'Bengaluru South Central',
-      title: 'Banquet & Community Hall Weddings in BTM Layout',
-      desc: 'Compact or grand, our team brings tailored decor packages for banquets, terrace parties, and intimate marriage halls throughout BTM 1st & 2nd Stage.',
-      venues: 'Boutique banquets, rooftop wedding terraces, mid-sized halls',
-      advantage: 'Space-saving modular stage designs and customized photo corners',
-      img: '/assets/Weddings/IMG_5408.JPG.jpeg',
-      caption: 'Weddings by Harsha • BTM Layout Reception Décor'
-    },
-    'electronic-city': {
-      zone: 'Hosur Road & Electronic City Corridor',
-      title: 'Resort & Open-Lawn Weddings in Electronic City & Bommasandra',
-      desc: 'Specializing in open-air fairytale decor across Hosur Road, Electronic City Phase 1 & 2, and lush suburban garden resorts. Our in-house sound systems and weather-proof pandals withstand outdoor elements effortlessly.',
-      venues: 'Open-air garden resorts, farmhouse estates, poolside lawns',
-      advantage: 'Heavy aluminum box trusses for large weather-safe canopies',
-      img: '/assets/Clients&Vips/WhatsApp Image 2026-09-23 at 12.00.41 PM.jpeg',
-      caption: 'Weddings by Harsha • Open-Lawn Resort Styling'
-    },
-    'hebbal': {
-      zone: 'North Bengaluru & Palace Grounds',
-      title: 'Palatial Palace Grounds & Luxury Weddings in Hebbal',
-      desc: 'Serving prestigious venues across Bellary Road, Hebbal, and Palace Grounds gates. Harsha’s team handles colossal 100ft+ stage fabrication, aluminum trussing, and mega banquet coordination.',
-      venues: 'Palace Grounds (Sheesh Mahal, Gayatri Vihar, King Court), luxury lake resorts',
-      advantage: 'Equipped to construct 100ft+ mega stages and VIP green rooms',
-      img: '/assets/Corporate&College/IMG_5174.JPG.jpeg',
-      caption: 'Weddings by Harsha • Hebbal & Palace Grounds Mega Rig'
-    },
-    'yelahanka': {
-      zone: 'North Bengaluru Country Estates',
-      title: 'Garden Farmhouse Weddings in Yelahanka',
-      desc: 'Designing rustic-chic and royal outdoor weddings at private farmhouses and luxury estates surrounding Yelahanka and the Airport highway.',
-      venues: 'Private farmhouse estates, luxury villa communities, amphitheaters',
-      advantage: 'Bespoke pampas grass, warm fairy-light canopies, and cocktail bars',
-      img: '/assets/Clients&Vips/WhatsApp Image 2026-09-23 at 12.00.43 PM.jpeg',
-      caption: 'Weddings by Harsha • Yelahanka Sunset Ceremony'
-    },
-    'majestic': {
-      zone: 'Central Bengaluru Heritage Hub',
-      title: 'Central Bengaluru & Majestic Choultry Weddings',
-      desc: 'Historic Kalyana Mantapas around Majestic, Gandhinagar, and Rajajinagar receive the pinnacle of our attention with timeless floral craftsmanship and live Nadaswaram coordination.',
-      venues: 'Traditional choultries, community wedding mantapas',
-      advantage: 'Rapid logistics turnaround in central Bangalore',
-      img: '/assets/HouseWarming/IMG_9119.JPG.jpeg',
-      caption: 'Weddings by Harsha • Central Bangalore Auspicious Mandap'
-    },
-    'yeshwanthpur': {
-      zone: 'West Bengaluru Corridor',
-      title: 'Convention Center & Expo Weddings in Yeshwanthpur',
-      desc: 'Equipped to furnish mega venues around Yeshwanthpur and Tumkur Road with 4K LED screens, acoustic line arrays, and grand bride/groom entry pathways.',
-      venues: 'Mega convention centers and multi-level banquet complexes',
-      advantage: 'Capacity to handle 2,500+ guests with synchronized catering flow',
-      img: '/assets/Corporate&College/IMG_5170.JPG.jpeg',
-      caption: 'Weddings by Harsha • Grand Convocation & Wedding Stage'
-    },
-    'bommasandra': {
-      zone: 'South Hosur Industrial Hub',
-      title: 'Wedding Decorators in Bommasandra & Chandapura',
-      desc: 'Providing budget-friendly, high-impact wedding setups for community halls, industrial clubhouses, and destination lawns along South Hosur Road.',
-      venues: 'Community marriage halls and suburban garden plots',
-      advantage: 'Complete packages including sound, photography, and mandap flowers',
-      img: '/assets/Weddings/IMG_9137.JPG.jpeg',
-      caption: 'Weddings by Harsha • Bommasandra Stage Fabrications'
-    },
-    'mysuru': {
-      zone: 'Heritage Capital of Karnataka',
-      title: 'Royal Destination Weddings in Mysuru (Palaces & Lalitha Mahal)',
-      desc: 'From royal heritage arches overlooking Chamundi Hills to grand banquets near Lalitha Mahal and Mysore Palace. Harsha’s full logistics fleet travels to Mysuru with zero middleman commissions.',
-      venues: 'Lalitha Mahal Palace, Silent Shores, Windflower, Chamundi Hill lawns',
-      advantage: 'Dedicated transport fleet via Bengaluru-Mysuru Expressway with zero vendor markup',
-      img: '/assets/Weddings/IMG_9141.JPG.jpeg',
-      caption: 'Weddings by Harsha • Mysuru Palace Royal Celebration'
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightboxModal && lightboxModal.classList.contains('active')) {
+      closeLightbox();
     }
-  };
-
-  localityButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      localityButtons.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const locKey = btn.dataset.locality;
-      const data = areaData[locKey] || areaData['kengeri'];
-
-      if (localityBadge) localityBadge.textContent = data.zone;
-      if (localityTitle) localityTitle.textContent = data.title;
-      if (localityDesc) localityDesc.textContent = data.desc;
-      if (localityVenues) localityVenues.textContent = data.venues;
-      if (localityAdvantage) localityAdvantage.textContent = data.advantage;
-      if (localityImg) {
-        localityImg.src = data.img;
-        localityImg.alt = data.title;
-      }
-      if (localityImgCaption) localityImgCaption.textContent = data.caption;
-      if (localityCtaBtn) {
-        localityCtaBtn.textContent = `Book ${btn.textContent.trim()} Wedding Consultation`;
-      }
-    });
   });
 }
 
 /* ==========================================================================
-   7. Main Consultation Lead Form
+   9. INTERACTIVE LEAD & QUOTE FORM WITH WHATSAPP DISPATCHER
    ========================================================================== */
 function initContactForm() {
-  const form = document.getElementById('lead-inquiry-form');
-  const banner = document.getElementById('form-success-banner');
+  const leadForm = document.getElementById('harsha-lead-form') || document.getElementById('harsha-contact-form');
+  const chips = document.querySelectorAll('#services-chips .service-chip');
 
-  if (!form) return;
+  if (!leadForm) return;
 
-  form.addEventListener('submit', (e) => {
+  // Toggle selection on chips if present
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('active');
+    });
+  });
+
+  leadForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const name = document.getElementById('lead-name').value;
-    const phone = document.getElementById('lead-phone').value;
-    const email = document.getElementById('lead-email').value || 'Not provided';
-    const city = document.getElementById('lead-city').value;
-    const area = document.getElementById('lead-area').value;
-    const eventType = document.getElementById('lead-event').value;
-    const guests = document.getElementById('lead-guests').value || 'To be finalized';
-    const date = document.getElementById('lead-date').value || 'To be finalized';
-    const budget = document.getElementById('lead-budget').value;
-    const notes = document.getElementById('lead-notes').value || 'Standard consultation';
+    // Read full lead parameters
+    const name = (document.getElementById('lead-name') || document.getElementById('contact-name'))?.value?.trim() || '';
+    const phone = (document.getElementById('lead-phone') || document.getElementById('contact-phone'))?.value?.trim() || '';
+    const email = (document.getElementById('lead-email') || document.getElementById('contact-email'))?.value?.trim() || '';
+    const city = document.getElementById('lead-city')?.value || 'Bengaluru';
+    const area = document.getElementById('lead-area')?.value || 'Bengaluru';
+    const eventType = document.getElementById('lead-event-type')?.value || 'Wedding';
+    const guests = document.getElementById('lead-guests')?.value || 'Not specified';
+    const date = document.getElementById('lead-date')?.value?.trim() || 'Flexible / To be finalized';
+    const budget = document.getElementById('lead-budget')?.value || 'Standard';
+    const message = (document.getElementById('lead-message') || document.getElementById('contact-message'))?.value?.trim() || '';
 
+    // Trigger celebration confetti
     confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.7 },
-      colors: ['#C59B27', '#E7C970', '#25D366']
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.65 },
+      colors: ['#cdaa7c', '#eaddcb', '#ffffff', '#25D366', '#d4af37']
     });
 
-    if (banner) {
-      banner.classList.remove('hidden');
-      form.style.display = 'none';
-    }
+    const whatsappMessage = `*New Event Quotation Enquiry — Weddings by Harsha*
+----------------------------------------
+*Client Name:* ${name}
+*Phone / WhatsApp:* ${phone}
+*Email:* ${email}
+*City:* ${city}
+*Locality / Area:* ${area}
+*Event Type:* ${eventType}
+*Expected Guests:* ${guests}
+*Preferred Date:* ${date}
+*Budget Range:* ${budget}
+*Special Notes / Venue:* ${message || 'Looking forward to discussing our upcoming celebration with Harsha.'}
+----------------------------------------
+_Sent from Weddings by Harsha Official Website_`;
 
-    const msg = `*New Wedding Lead — Weddings by Harsha*%0A%0A• *Client Name:* ${encodeURIComponent(name)}%0A• *Phone:* ${encodeURIComponent(phone)}%0A• *Email:* ${encodeURIComponent(email)}%0A• *Event:* ${encodeURIComponent(eventType)}%0A• *City & Locality:* ${encodeURIComponent(city)} (${encodeURIComponent(area)})%0A• *Estimated Guests:* ${encodeURIComponent(guests)}%0A• *Tentative Date:* ${encodeURIComponent(date)}%0A• *Budget:* ${encodeURIComponent(budget)}%0A• *Notes:* ${encodeURIComponent(notes)}%0A%0A_Sent via online consultation form_`;
+    const whatsappUrl = `https://wa.me/919108619752?text=${encodeURIComponent(whatsappMessage)}`;
 
     setTimeout(() => {
-      window.open(`https://wa.me/919108619752?text=${msg}`, '_blank');
-    }, 800);
+      window.open(whatsappUrl, '_blank');
+      leadForm.reset();
+    }, 700);
   });
 }
+
