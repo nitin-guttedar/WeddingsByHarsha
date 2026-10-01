@@ -4,6 +4,23 @@
 
 @import '/utsav.css';
 
+/* ==========================================================================
+   OFFICIAL BRAND THEME OVERRIDES (ROYAL CRIMSON & WARM GOLDEN YELLOW)
+   Matches the Official Weddings By Harsha Logo
+   ========================================================================== */
+:root {
+  --color-maroon: #5e000b;
+  --color-maroon-dark: #380006;
+  --color-maroon-light: #8c0012;
+  --color-crimson: #75000e;
+  --color-gold: #ffd000;
+  --color-gold-light: #ffe57f;
+  --color-gold-dark: #cfa000;
+  --color-cream: #faf7f2;
+  --color-cream-dark: #f2ede4;
+  --bg-dark: #120103;
+}
+
 /* Local Brand & Logo Customization */
 .logo-wrapper {
   display: flex;
@@ -133,6 +150,303 @@
   background: var(--color-gold, #cdaa7c);
   color: #1a1a1a;
   border-color: var(--color-gold, #cdaa7c);
+}
+
+/* ==========================================================================
+   LUXURY NAVBAR SERVICES DROPDOWN & SUB-SECTION
+   ========================================================================== */
+.nav-item-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-link.dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.dropdown-chevron-icon {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+.nav-item-dropdown:hover .dropdown-chevron-icon,
+.nav-item-dropdown:focus-within .dropdown-chevron-icon,
+.nav-item-dropdown.is-open .dropdown-chevron-icon {
+  transform: rotate(180deg);
+  color: var(--color-gold, #cdaa7c);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: 320px;
+  padding: 0.65rem;
+  background: rgba(18, 16, 16, 0.96);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(205, 170, 124, 0.28);
+  border-radius: 12px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 25px rgba(205, 170, 124, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.28s;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Invisible bridge so mouse does not leave hover area */
+.nav-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: transparent;
+}
+
+/* Dropdown arrow */
+.nav-dropdown-menu::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: rgba(18, 16, 16, 0.96);
+  border-left: 1px solid rgba(205, 170, 124, 0.28);
+  border-top: 1px solid rgba(205, 170, 124, 0.28);
+}
+
+.nav-item-dropdown:hover .nav-dropdown-menu,
+.nav-item-dropdown:focus-within .nav-dropdown-menu,
+.nav-item-dropdown.is-open .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-link-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown-link-card:hover {
+  background: rgba(205, 170, 124, 0.12);
+  border-color: rgba(205, 170, 124, 0.25);
+  transform: translateX(4px);
+}
+
+.dropdown-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(205, 170, 124, 0.12);
+  border: 1px solid rgba(205, 170, 124, 0.2);
+  color: var(--color-gold, #cdaa7c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.dropdown-link-card:hover .dropdown-icon-box {
+  background: var(--color-gold, #cdaa7c);
+  color: #1a1a1a;
+  border-color: var(--color-gold, #cdaa7c);
+  transform: scale(1.05);
+}
+
+.dropdown-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  text-align: left;
+}
+
+.dropdown-heading {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  transition: color 0.2s ease;
+}
+
+.dropdown-link-card:hover .dropdown-heading {
+  color: var(--color-gold, #cdaa7c);
+}
+
+.dropdown-subtext {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.3;
+}
+
+.dropdown-link-card.active {
+  background: rgba(205, 170, 124, 0.16);
+  border-color: rgba(205, 170, 124, 0.35);
+}
+
+.dropdown-link-card.active .dropdown-heading {
+  color: var(--color-gold, #cdaa7c);
+}
+
+/* Scrolled Navbar Theme Adaptation for Dropdown */
+.navbar-container.scrolled .nav-dropdown-menu {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(205, 170, 124, 0.35);
+  box-shadow: 0 20px 45px rgba(42, 2, 10, 0.12), 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-container.scrolled .nav-dropdown-menu::after {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(205, 170, 124, 0.35);
+}
+
+.navbar-container.scrolled .dropdown-heading {
+  color: var(--color-maroon, #2a2a2a);
+}
+
+.navbar-container.scrolled .dropdown-link-card:hover .dropdown-heading {
+  color: var(--color-gold-dark, #b8915b);
+}
+
+.navbar-container.scrolled .dropdown-subtext {
+  color: #666;
+}
+
+/* ==========================================================================
+   MOBILE MENU DRAWER WITH SUB-SECTION
+   ========================================================================== */
+.mobile-menu-overlay {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  padding: 3.5rem 1.5rem 2.5rem !important;
+}
+
+.mobile-menu-content {
+  gap: 1.4rem !important;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.mobile-nav-link {
+  font-size: 1.85rem !important;
+  letter-spacing: 0.08em !important;
+  text-align: center;
+}
+
+.mobile-nav-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.mobile-services-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.mobile-sub-toggle {
+  background: transparent;
+  border: 1px solid rgba(205, 170, 124, 0.35);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  color: var(--color-gold, #cdaa7c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2px;
+}
+
+.mobile-sub-toggle .mobile-sub-chevron {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-sub-toggle.is-open .mobile-sub-chevron {
+  transform: rotate(180deg);
+}
+
+.mobile-sub-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  max-width: 290px;
+  margin-top: 0.75rem;
+  padding: 0.6rem;
+  background: rgba(205, 170, 124, 0.08);
+  border: 1px solid rgba(205, 170, 124, 0.22);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.mobile-sub-menu.collapsed {
+  display: none;
+}
+
+.mobile-sub-link {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-maroon, #2a2a2a);
+  text-decoration: none;
+  padding: 0.55rem 0.8rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  transition: all 0.2s ease;
+}
+
+.mobile-sub-link .sub-link-bullet {
+  color: var(--color-gold, #cdaa7c);
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+.mobile-sub-link:hover,
+.mobile-sub-link.active {
+  background: rgba(205, 170, 124, 0.2);
+  color: var(--color-gold-dark, #b8915b);
+  font-weight: 600;
+  transform: translateX(3px);
 }
 
 /* Hero Section Enhancements & Proper Alignment */
@@ -745,10 +1059,36 @@
   display: block;
 }
 
-/* Preloader Styles & Dismissal */
+/* Preloader Styles & Royal Crimson / Gold Theme */
 .preloader-overlay {
+  background: radial-gradient(ellipse at 50% 45%, #75000e 0%, #4a0008 45%, #250004 80%, #120002 100%) !important;
   transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
   will-change: opacity, visibility;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  overflow: hidden !important;
+}
+
+.preloader-overlay::before {
+  content: '';
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 208, 0, 0.15) 0%, rgba(140, 0, 18, 0.18) 50%, transparent 70%);
+  pointer-events: none;
+  animation: preloaderAuraPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes preloaderAuraPulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  100% { transform: scale(1.15); opacity: 1; }
 }
 
 .preloader-overlay.preloader-hidden {
@@ -761,14 +1101,56 @@ body:not(.preloader-active) #preloader {
   display: none !important;
 }
 
+.preloader-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  position: relative !important;
+  z-index: 101 !important;
+}
+
+/* Centered Progress Line (Fix for Misaligned Loader) */
+.preloader-line-container {
+  display: block !important;
+  margin: 1.8rem auto 1.2rem auto !important;
+  width: 130px !important;
+  height: 2px !important;
+  background: rgba(255, 208, 0, 0.22) !important;
+  border-radius: 2px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
 .preloader-line {
-  animation: preloaderLineFill 1.3s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+  background: linear-gradient(90deg, #ffe082, #ffd000, #ffe082) !important;
+  transform-origin: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  box-shadow: 0 0 10px rgba(255, 208, 0, 0.8) !important;
+  animation: preloaderLineFill 2s cubic-bezier(0.25, 1, 0.5, 1) infinite !important;
+}
+
+.preloader-tagline {
+  font-family: var(--font-secondary, "Inter", sans-serif) !important;
+  letter-spacing: 0.35em !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  text-align: center !important;
 }
 
 /* Preloader Keyframes */
 @keyframes preloaderLineFill {
-  0% { transform: scaleX(0); }
-  100% { transform: scaleX(1); }
+  0% { transform: scaleX(0.05); opacity: 0.4; }
+  50% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(0.05); opacity: 0.4; }
 }
 
 @keyframes pulse-dot {
@@ -1245,6 +1627,30 @@ body:not(.preloader-active) #preloader {
   display: block;
 }
 
+.location-maps-btn:hover {
+  background: var(--color-gold, #cdaa7c) !important;
+  color: #1a1a1a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(205, 170, 124, 0.35);
+}
+
+.btn-maps-redirect:hover {
+  background: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(205, 170, 124, 0.4);
+}
+
+.map-container:hover .map-click-overlay {
+  background: var(--color-gold, #cdaa7c) !important;
+  color: #1a1a1a !important;
+  border-color: #fff !important;
+  transform: scale(1.03);
+}
+
+.map-click-overlay {
+  transition: all 0.3s ease;
+}
+
 /* ==========================================================================
    STICKY MOBILE BOTTOM BAR (DIRECT CALL & WHATSAPP)
    ========================================================================== */
@@ -1305,4 +1711,578 @@ body:not(.preloader-active) #preloader {
     padding-bottom: 60px;
   }
 }
+
+/* ==========================================================================
+   ROYAL ELEPHANT CREST & TRUNK ANIMATION (LAUNCH SCREEN / PRELOADER)
+   ========================================================================== */
+.preloader-elephant-crest {
+  margin: 0 auto 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.crest-gold-ring {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(135deg, #ffe082 0%, #ffd000 35%, #b8860b 70%, #fff176 100%);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85),
+              0 0 45px rgba(255, 208, 0, 0.4),
+              inset 0 0 15px rgba(0, 0, 0, 0.7);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+  animation: preloaderRingPulse 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes preloaderRingPulse {
+  0% {
+    transform: scale(0.98);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 208, 0, 0.35);
+  }
+  100% {
+    transform: scale(1.02);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.9), 0 0 55px rgba(255, 208, 0, 0.65);
+  }
+}
+
+.crest-gold-ring-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  background: radial-gradient(circle at 50% 45%, #7a0010 0%, #4a0008 60%, #200004 100%);
+}
+
+.crest-svg-hero {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Elephant Trunk Animation: Starts UP (0%), moves DOWN (50%), returns UP (100%), and repeats */
+.elephant-trunk-anim-left {
+  transform-origin: 173.5px 168.5px;
+  animation: elephantTrunkDownUpLeft 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.elephant-trunk-anim-right {
+  transform-origin: 201.5px 168.5px;
+  animation: elephantTrunkDownUpRight 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes elephantTrunkDownUpLeft {
+  0% {
+    /* Up position (original logo pose) */
+    transform: rotate(0deg) translate(0, 0);
+  }
+  45% {
+    /* Move DOWN gracefully */
+    transform: rotate(-15deg) translate(-1px, 5px);
+  }
+  55% {
+    /* Settle at bottom of downward bow */
+    transform: rotate(-16deg) translate(-1.5px, 5.5px);
+  }
+  100% {
+    /* Return UP and repeat */
+    transform: rotate(0deg) translate(0, 0);
+  }
+}
+
+@keyframes elephantTrunkDownUpRight {
+  0% {
+    /* Up position (original logo pose) */
+    transform: rotate(0deg) translate(0, 0);
+  }
+  45% {
+    /* Move DOWN gracefully */
+    transform: rotate(15deg) translate(1px, 5px);
+  }
+  55% {
+    /* Settle at bottom of downward bow */
+    transform: rotate(16deg) translate(1.5px, 5.5px);
+  }
+  100% {
+    /* Return UP and repeat */
+    transform: rotate(0deg) translate(0, 0);
+  }
+}
+
+/* Interactive Salute on Hover/Celebrate Tap */
+.preloader-elephant-crest:hover .crest-gold-ring {
+  transform: scale(1.04);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9),
+              0 0 60px rgba(255, 208, 0, 0.7);
+}
+
+.preloader-elephant-crest:hover .elephant-trunk-anim-left,
+.preloader-elephant-crest.celebrate .elephant-trunk-anim-left {
+  animation: elephantTrunkCelebrationLeft 0.8s ease-in-out infinite alternate !important;
+}
+
+.preloader-elephant-crest:hover .elephant-trunk-anim-right,
+.preloader-elephant-crest.celebrate .elephant-trunk-anim-right {
+  animation: elephantTrunkCelebrationRight 0.8s ease-in-out infinite alternate !important;
+}
+
+@keyframes elephantTrunkCelebrationLeft {
+  0% { transform: rotate(0deg) translate(0, 0); }
+  100% { transform: rotate(-22deg) translate(-2px, 8px); }
+}
+
+@keyframes elephantTrunkCelebrationRight {
+  0% { transform: rotate(0deg) translate(0, 0); }
+  100% { transform: rotate(22deg) translate(2px, 8px); }
+}
+
+.crest-mandala-shimmer {
+  transform-origin: 187.5px 122px;
+  animation: crestMandalaGlow 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes crestMandalaGlow {
+  0% {
+    transform: scale(0.97);
+    filter: drop-shadow(0 0 2px rgba(255, 208, 0, 0.4));
+  }
+  100% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 8px rgba(255, 208, 0, 0.85));
+  }
+}
+
+.preloader-hint {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.65rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-gold, #ffd000);
+  opacity: 0.75;
+  margin-top: 1.2rem;
+  transition: opacity 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .crest-gold-ring {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* ==========================================================================
+   HIGH-PERFORMANCE CLIENT INSTAGRAM REEL (ZERO INITIAL OVERHEAD)
+   ========================================================================== */
+.intro-reel-wrapper {
+  background: radial-gradient(circle at 50% 20%, #300007 0%, #150003 100%);
+  border: 1.5px solid rgba(255, 208, 0, 0.4);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 30px rgba(255, 208, 0, 0.15);
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.intro-reel-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 32px 75px rgba(0, 0, 0, 0.85), 0 0 40px rgba(255, 208, 0, 0.3);
+  border-color: rgba(255, 208, 0, 0.7);
+}
+
+.insta-reel-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.85rem 1.1rem;
+  background: rgba(22, 0, 4, 0.94);
+  border-bottom: 1px solid rgba(255, 208, 0, 0.22);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.insta-profile-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.insta-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #ffd000;
+  box-shadow: 0 0 10px rgba(255, 208, 0, 0.45);
+  flex-shrink: 0;
+}
+
+.insta-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.insta-handle {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.insta-badge-check {
+  color: #ffd000;
+  font-size: 0.8rem;
+}
+
+.insta-subtext {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.68);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.insta-open-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 0.48rem 0.95rem;
+  background: linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%);
+  color: #fff;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(221, 42, 123, 0.45);
+}
+
+.insta-open-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.insta-open-btn span {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.insta-open-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(221, 42, 123, 0.65);
+  color: #fff;
+}
+
+/* Instagram Video Stage with Autoplay & Native Controls */
+.insta-video-container {
+  position: relative;
+  width: 100%;
+  height: 550px;
+  background: #000;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.insta-video-container .intro-side-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+}
+
+.insta-video-container:hover .intro-side-video {
+  transform: scale(1.03);
+  filter: brightness(1.05);
+}
+
+.insta-video-container .video-overlay-tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.02) 40%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.insta-video-container:hover .video-overlay-tint {
+  opacity: 0.85;
+}
+
+.insta-video-container .video-frame-accent {
+  pointer-events: none;
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(255, 208, 0, 0.25);
+  border-radius: 12px;
+  transition: border-color 0.3s ease;
+  z-index: 2;
+}
+
+.insta-video-container:hover .video-frame-accent {
+  border-color: rgba(255, 208, 0, 0.6);
+}
+
+/* Floating Live Autoplay Badge */
+.insta-tap-badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 5;
+  background: rgba(18, 1, 3, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 208, 0, 0.45);
+  color: #ffd000;
+  padding: 6px 14px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: #25d366;
+  box-shadow: 0 0 8px #25d366;
+  animation: liveDotPulse 1.8s infinite;
+}
+
+@keyframes liveDotPulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* Center Play / Pause Indicator Button */
+.video-center-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: rgba(18, 1, 3, 0.82);
+  border: 2px solid #ffd000;
+  color: #ffd000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 6;
+  opacity: 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 208, 0, 0.35);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s, color 0.25s;
+  backdrop-filter: blur(8px);
+}
+
+.insta-video-container:hover .video-center-play-btn {
+  opacity: 0.9;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.insta-video-container.is-paused .video-center-play-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.video-center-play-btn:hover {
+  background: #ffd000;
+  color: #140003;
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow: 0 10px 35px rgba(255, 208, 0, 0.6);
+}
+
+/* Audio Track Meta Pill */
+.insta-audio-pill {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  z-index: 5;
+  background: rgba(18, 1, 3, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.92);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.insta-audio-pill svg {
+  color: #ffd000;
+  flex-shrink: 0;
+}
+
+/* Sound Control Button */
+.insta-video-container .video-audio-toggle {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  z-index: 7;
+  background: rgba(18, 1, 3, 0.86);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 208, 0, 0.6);
+  color: #ffd000;
+  padding: 7px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.74rem;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+  transition: all 0.25s ease;
+}
+
+.insta-video-container .video-audio-toggle:hover {
+  background: #ffd000;
+  color: #1a0003;
+  border-color: #ffd000;
+  transform: scale(1.06);
+  box-shadow: 0 6px 22px rgba(255, 208, 0, 0.45);
+}
+
+/* Bottom Reel Footer / Caption Bar */
+.insta-reel-footer {
+  display: block;
+  text-decoration: none;
+  padding: 1.15rem 1.35rem;
+  background: rgba(18, 1, 3, 0.96);
+  border-top: 1px solid rgba(255, 208, 0, 0.22);
+  transition: background 0.3s ease, border-top-color 0.3s ease;
+  z-index: 10;
+  position: relative;
+}
+
+.insta-reel-footer:hover {
+  background: rgba(38, 2, 7, 0.98);
+  border-top-color: rgba(255, 208, 0, 0.5);
+}
+
+.insta-caption-text {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+.insta-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.insta-view-reel-link {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.74rem;
+  color: #ffd000;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 0.25s ease;
+}
+
+.insta-reel-footer:hover .insta-view-reel-link {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.insta-reel-tag {
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 2px 10px rgba(221, 42, 123, 0.35);
+}
+
+.insta-reel-footer:hover .insta-reel-tag {
+  transform: scale(1.06);
+  box-shadow: 0 4px 15px rgba(221, 42, 123, 0.6);
+}
+
+@media (max-width: 768px) {
+  .insta-video-container {
+    height: 440px;
+  }
+  .intro-reel-wrapper {
+    max-width: 100%;
+  }
+}
+
+
+
 

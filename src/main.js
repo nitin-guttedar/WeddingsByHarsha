@@ -10,16 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallaxDestinations();
   initGalleryAndLightbox();
   initContactForm();
+  initElephantAnimation();
 });
 
 /* ==========================================================================
-   1. ROYAL PRELOADER (1.4s Timer with Auto-Dismissal)
+   1. ROYAL PRELOADER (2.6s Timer with Animated Elephant Greeting & Click-to-Dismiss)
    ========================================================================== */
 function initPreloader() {
   const preloader = document.getElementById('preloader');
   if (!preloader) return;
 
+  let dismissed = false;
   function dismissPreloader() {
+    if (dismissed) return;
+    dismissed = true;
     preloader.classList.add('preloader-hidden');
     document.body.classList.remove('preloader-active');
     setTimeout(() => {
@@ -27,15 +31,15 @@ function initPreloader() {
     }, 800);
   }
 
-  // Dismiss after royal reveal animation
-  setTimeout(dismissPreloader, 1400);
+  // Allow 3.2s so users see the full royal elephant salute cycle (tap anytime to skip)
+  setTimeout(dismissPreloader, 3200);
 
-  // User click on preloader dismisses immediately
+  // User click or tap on preloader dismisses immediately
   preloader.addEventListener('click', dismissPreloader);
 
   // Safety fallback if page load or timer delays
   window.addEventListener('load', () => {
-    setTimeout(dismissPreloader, 1600);
+    setTimeout(dismissPreloader, 3400);
   });
 }
 
@@ -78,6 +82,26 @@ function initRouter() {
         link.classList.remove('active');
       }
     });
+
+    // Highlight parent Services dropdown trigger when on /services, /gallery, or /areas
+    const servicesDropdownToggle = document.querySelector('.nav-item-dropdown .dropdown-toggle');
+    if (servicesDropdownToggle) {
+      if (['/services', '/gallery', '/areas'].includes(cleanRoute)) {
+        servicesDropdownToggle.classList.add('active');
+      } else {
+        servicesDropdownToggle.classList.remove('active');
+      }
+    }
+
+    // Also highlight mobile Services title if in its sub-route
+    const mobileServicesTitle = document.querySelector('.mobile-services-title');
+    if (mobileServicesTitle) {
+      if (['/services', '/gallery', '/areas'].includes(cleanRoute)) {
+        mobileServicesTitle.classList.add('active');
+      } else {
+        mobileServicesTitle.classList.remove('active');
+      }
+    }
 
     // Close mobile menu if open
     const mobileOverlay = document.getElementById('mobile-menu-overlay');
@@ -160,6 +184,17 @@ function initMobileMenu() {
       overlay.classList.remove('open');
     }
   });
+
+  // Mobile submenu accordion toggle
+  const subToggle = document.getElementById('mobile-sub-toggle');
+  const subMenu = document.getElementById('mobile-sub-menu');
+  if (subToggle && subMenu) {
+    subToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isCollapsed = subMenu.classList.toggle('collapsed');
+      subToggle.classList.toggle('is-open', !isCollapsed);
+    });
+  }
 }
 
 /* ==========================================================================
@@ -179,31 +214,90 @@ function initHeroSlider() {
 }
 
 /* ==========================================================================
-   6. SIGNATURE INTRO VIDEO CONTROLS
+   6. CLIENT INSTAGRAM REEL AUTOPLAY & ON-PRESS CONTROLLER
    ========================================================================== */
 function initIntroVideo() {
+  const reelUrl = 'https://www.instagram.com/reel/DdkqnOlT7WS/?stkn=a2sxN2tkaHF1MTMy';
+  const clickArea = document.getElementById('insta-video-click-area');
   const video = document.getElementById('intro-feature-video');
-  const toggleBtn = document.getElementById('intro-sound-toggle');
-  const icon = document.getElementById('intro-sound-icon');
-  const text = document.getElementById('intro-sound-text');
+  const playBtn = document.getElementById('intro-play-toggle');
+  const playIcon = document.getElementById('intro-play-icon');
+  const soundBtn = document.getElementById('intro-sound-toggle');
+  const soundIcon = document.getElementById('intro-sound-icon');
+  const soundText = document.getElementById('intro-sound-text');
 
   if (!video) return;
 
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', (e) => {
+  function updatePlayState() {
+    if (video.paused) {
+      if (clickArea) clickArea.classList.add('is-paused');
+      if (playIcon) {
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      }
+    } else {
+      if (clickArea) clickArea.classList.remove('is-paused');
+      if (playIcon) {
+        playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+      }
+    }
+  }
+
+  // 1. Play / Pause Control
+  if (playBtn) {
+    playBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      e.preventDefault();
+      if (video.paused) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+      updatePlayState();
+    });
+  }
+
+  video.addEventListener('play', updatePlayState);
+  video.addEventListener('pause', updatePlayState);
+
+  // 2. Sound Toggle (Audio unmute/mute, prevents redirection)
+  if (soundBtn) {
+    soundBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
       video.muted = !video.muted;
       if (video.muted) {
-        if (icon) icon.textContent = '🔇';
-        if (text) text.textContent = 'Unmute Sound';
+        if (soundIcon) soundIcon.textContent = '🔇';
+        if (soundText) soundText.textContent = 'Unmute Sound';
       } else {
-        if (icon) icon.textContent = '🔊';
-        if (text) text.textContent = 'Mute Sound';
+        if (soundIcon) soundIcon.textContent = '🔊';
+        if (soundText) soundText.textContent = 'Mute Sound';
+        if (video.paused) {
+          video.play().catch(() => {});
+        }
       }
     });
   }
 
-  // Optimize performance: pause video when scrolled away
+  // 3. On-Press Redirection to the exact Instagram Reel URL
+  if (clickArea) {
+    clickArea.addEventListener('click', (e) => {
+      if (e.target.closest('#intro-play-toggle') || e.target.closest('#intro-sound-toggle')) {
+        return;
+      }
+      window.open(reelUrl, '_blank', 'noopener,noreferrer');
+    });
+  }
+
+  // 4. Default Autoplay with IntersectionObserver
+  video.playsInline = true;
+  const playPromise = video.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(() => {
+      video.muted = true;
+      video.play().catch(() => {});
+    });
+  }
+
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -213,7 +307,7 @@ function initIntroVideo() {
           if (!video.paused) video.pause();
         }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.2 });
     observer.observe(video);
   }
 }
@@ -416,4 +510,35 @@ _Sent from Weddings by Harsha Official Website_`;
     }, 700);
   });
 }
+
+/* ==========================================================================
+   10. ROYAL ELEPHANT CREST INTERACTION & CONFETTI BLESSING (LAUNCH SCREEN)
+   ========================================================================== */
+function initElephantAnimation() {
+  const crest = document.getElementById('preloader-elephant-crest') || document.querySelector('.preloader-elephant-crest');
+  if (!crest) return;
+
+  let throttle = false;
+  crest.addEventListener('click', (e) => {
+    e.stopPropagation(); // allow crest interaction without dismissing immediately
+    if (throttle) return;
+    throttle = true;
+
+    crest.classList.add('celebrate');
+
+    // Trigger golden royal confetti shower
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { y: 0.4 },
+      colors: ['#ffd700', '#fdb82c', '#ffe699', '#7a010d', '#ffffff']
+    });
+
+    setTimeout(() => {
+      crest.classList.remove('celebrate');
+      throttle = false;
+    }, 1800);
+  });
+}
+
 
