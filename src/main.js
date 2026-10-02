@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initHeroSlider();
   initIntroVideo();
+  initVideoPerformanceOptimizer();
   initParallaxDestinations();
   initGalleryAndLightbox();
   initContactForm();
   initElephantAnimation();
+  registerServiceWorker();
 });
 
 /* ==========================================================================
@@ -106,6 +108,14 @@ function initRouter() {
     // Close mobile menu if open
     const mobileOverlay = document.getElementById('mobile-menu-overlay');
     if (mobileOverlay) mobileOverlay.classList.remove('open');
+
+    // Pause all background videos located in non-active views to conserve CPU & memory
+    document.querySelectorAll('video:not(#lightbox-video)').forEach((v) => {
+      const parentView = v.closest('.app-view');
+      if (parentView && !parentView.classList.contains('active')) {
+        v.pause();
+      }
+    });
 
     // Scroll to top with instantaneous behavior like Lenis
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
@@ -333,8 +343,8 @@ function initParallaxDestinations() {
       const moveTop = (progress - 0.5) * 180;
       const moveBottom = (0.5 - progress) * 180;
 
-      rowTop.style.transform = `translateX(${moveTop}px)`;
-      rowBottom.style.transform = `translateX(${moveBottom}px)`;
+      rowTop.style.transform = `translate3d(${moveTop}px, 0, 0)`;
+      rowBottom.style.transform = `translate3d(${moveBottom}px, 0, 0)`;
     }
     ticking = false;
   }
@@ -539,6 +549,51 @@ function initElephantAnimation() {
       throttle = false;
     }, 1800);
   });
+}
+
+/* ==========================================================================
+   11. SMART VIDEO PERFORMANCE & AUTOPLAY OBSERVER
+   Pauses videos that are scrolled out of view to maintain 60 FPS
+   ========================================================================== */
+function initVideoPerformanceOptimizer() {
+  const allVideos = document.querySelectorAll('video:not(#lightbox-video)');
+
+  if ('IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        const parentView = video.closest('.app-view');
+        const isViewActive = !parentView || parentView.classList.contains('active');
+
+        if (entry.isIntersecting && isViewActive) {
+          if (video.muted && video.paused) {
+            video.play().catch(() => {});
+          }
+        } else {
+          if (!video.paused) {
+            video.pause();
+          }
+        }
+      });
+    }, { threshold: 0.15 });
+
+    allVideos.forEach((v) => videoObserver.observe(v));
+  }
+}
+
+/* ==========================================================================
+   12. HIGH SPEED SERVICE WORKER REGISTRATION (CACHE & OFFLINE ASSETS)
+   ========================================================================== */
+function registerServiceWorker() {
+  if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then((reg) => {
+        console.log('[Cache] Service Worker registered for seamless asset caching');
+      }).catch((err) => {
+        console.warn('[Cache] SW registration failed:', err);
+      });
+    });
+  }
 }
 
 

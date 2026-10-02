@@ -2397,59 +2397,94 @@ body:not(.preloader-active) #preloader {
 }
 
 /* ==========================================================================
-   PEOPLE & FACES IMAGE ALIGNMENT OPTIMIZATIONS
-   Ensures heads and faces are not cropped off on mobile, tablet, and desktop
+/* ==========================================================================
+   GALLERY CLIENTS & VIPS IMAGE & FACE ALIGNMENT OPTIMIZATIONS
+   Ensures heads and faces are beautifully framed in the Gallery Portfolio
+   ========================================================================== */
+.gallery-item[data-src*="12.00.39"] .gallery-img-bg { background-position: center 15% !important; }
+.gallery-item[data-src*="12.00.40"] .gallery-img-bg { background-position: center 15% !important; }
+.gallery-item[data-src*="12.00.41"] .gallery-img-bg { background-position: center 18% !important; }
+.gallery-item[data-src*="12.00.42"] .gallery-img-bg { background-position: center 15% !important; }
+.gallery-item[data-src*="12.00.43"] .gallery-img-bg { background-position: center 18% !important; }
+.gallery-item[data-src*="12.00.44"] .gallery-img-bg { background-position: center 26% !important; }
+.gallery-item[data-src*="12.00.45"] .gallery-img-bg { background-position: center 12% !important; }
+.gallery-item[data-src*="12.00.46"] .gallery-img-bg { background-position: center 15% !important; }
+.gallery-item[data-src*="12.00.47"] .gallery-img-bg { background-position: center 36% !important; }
+.gallery-item[data-src*="12.00.48"] .gallery-img-bg { background-position: center 15% !important; }
+.gallery-item[data-src*="12.00.49"] .gallery-img-bg { background-position: center 22% !important; }
+.gallery-item[data-src*="12.00.50"] .gallery-img-bg { background-position: center 15% !important; }
+.gallery-item[data-src*="12.00.52"] .gallery-img-bg { background-position: center 12% !important; }
+
+/* ==========================================================================
+   PERFORMANCE & 60 FPS SMOOTH SCROLLING OPTIMIZATIONS
+   Eliminates UI thread stutter and jank on mobile and desktop
    ========================================================================== */
 
-/* 1. Services Card 12 - Logistics, Baraat & Transport (2 Gentlemen standing) */
-.service-feature-card img[src*="12.00.45"],
-.service-card-logistics img,
-.img-align-logistics {
-  object-position: center 12% !important;
+/* GPU Hardware Acceleration for Cards & Grid Items */
+.service-feature-card,
+.area-card,
+.blog-card,
+.gallery-item,
+.leader-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 360px;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
-/* 2. Blog Card 3 - 30 Days Pre-Wedding Checklist (3 Gentlemen in front of banner) */
-.blog-card .blog-img-wrap img[src*="12.00.44"],
-.blog-card img[src*="12.00.44"],
-.img-align-checklist {
-  object-position: center 26% !important;
+/* Parallax GPU Compositor layers */
+#dest-row-top,
+#dest-row-bottom {
+  will-change: transform;
 }
 
-/* 3. Area Card 10 - Majestic Kempegowda (Harsha & Police Officer) */
-.area-card .area-img-wrap img[src*="12.00.47"],
-.area-card img[src*="12.00.47"],
-.img-align-majestic {
-  object-position: center 36% !important;
+/* Video Elements Performance */
+video.gallery-img-bg,
+.intro-side-video {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-/* 4. Leadership / Founders Portraits (About Us) */
-.leader-card:nth-child(1) .leader-img-wrap img,
-.leader-img-wrap img[src*="12.00.41"] {
-  object-position: center 15% !important;
+/* Footer Developer Credit & Responsive Alignment */
+.footer-legal-inner {
+  padding: 1.2rem 5vw !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
 }
 
-.leader-card:nth-child(2) .leader-img-wrap img,
-.leader-img-wrap img[src*="12.00.48"] {
-  object-position: center 15% !important;
+.footer-developer-credit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  letter-spacing: 0.4px;
 }
 
-.leader-card:nth-child(3) .leader-img-wrap img,
-.leader-img-wrap img[src*="12.00.43"] {
-  object-position: center 18% !important;
+.footer-developer-credit a {
+  display: inline-block;
+  color: var(--color-gold, #cdaa7c) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.8px !important;
+  transition: all 0.25s ease !important;
 }
 
-/* 5. Gallery Grid Items with Team & Clients */
-.gallery-item[data-src*="12.00.41"] .gallery-img-bg,
-.gallery-bg-align-harsha {
-  background-position: center 18% !important;
+.footer-developer-credit a:hover {
+  color: #ffffff !important;
+  text-decoration: underline !important;
+  transform: translateY(-1px);
 }
 
-.gallery-item[data-src*="12.00.48"] .gallery-img-bg,
-.gallery-bg-align-couple {
-  background-position: center 15% !important;
-}
-
-.gallery-item[data-src*="12.00.44"] .gallery-img-bg,
-.gallery-bg-align-vip {
-  background-position: center 25% !important;
+@media (max-width: 768px) {
+  .footer-legal-inner {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 0.8rem !important;
+    padding: 1.5rem 1rem !important;
+  }
 }
