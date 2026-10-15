@@ -475,15 +475,16 @@
   width: 100%;
   height: 100%;
   background-size: cover;
-  background-position: center;
+  background-position: center 16% !important; /* Preserves sacred crown & frames middle idol + floral table */
   opacity: 0;
   transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), transform 8s ease-out;
   transform: scale(1);
+  transform-origin: center 20%;
 }
 
 .hero-bg-slide.active {
   opacity: 1;
-  transform: scale(1.06);
+  transform: scale(1.03); /* Subtle luxury scale that doesn't push the top out of view */
 }
 
 .hero-overlay {
@@ -710,18 +711,47 @@
 .contact-hero-mini {
   position: relative !important;
   box-sizing: border-box !important;
-  padding-top: 150px !important; /* Critical: provides 60px+ safe space below 85px fixed navbar */
+  padding-top: 150px !important; /* Safe space below fixed navbar */
   padding-bottom: 75px !important;
-  min-height: 420px !important;
   height: auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   background-size: cover !important;
-  background-position: center !important;
+  background-attachment: scroll !important;
   overflow: hidden !important;
   text-align: center !important;
+}
+
+/* Individualized optimal focal framing so middle content is visible without top/bottom cropping */
+.about-hero-section {
+  min-height: 560px !important;
+  background-position: center 36% !important; /* Perfectly frames the golden mandap and sanctum in the middle */
+}
+
+.services-hero {
+  min-height: 560px !important;
+  background-position: center 16% !important; /* Preserves Ganesha's sacred crown above and frames idol + flowers */
+}
+
+.gallery-hero {
+  min-height: 500px !important;
+  background-position: center 30% !important;
+}
+
+.areas-hero {
+  min-height: 500px !important;
+  background-position: center 25% !important;
+}
+
+.blog-hero {
+  min-height: 500px !important;
+  background-position: center 35% !important;
+}
+
+.contact-hero-mini {
+  min-height: 380px !important;
 }
 
 /* Gradient overlays for inner page heroes */
@@ -732,7 +762,7 @@
 .blog-hero .hero-overlay {
   position: absolute !important;
   inset: 0 !important;
-  background: linear-gradient(180deg, rgba(16, 14, 13, 0.85) 0%, rgba(16, 14, 13, 0.65) 50%, rgba(22, 22, 22, 0.97) 100%) !important;
+  background: linear-gradient(180deg, rgba(16, 14, 13, 0.2) 0%, rgba(16, 14, 13, 0.5) 35%, rgba(22, 22, 22, 0.94) 100%) !important;
   z-index: 1 !important;
 }
 
@@ -796,7 +826,15 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4.5rem;
-  align-items: center;
+  align-items: flex-start !important; /* Start card initially at top beside title instead of centering */
+}
+
+.story-image-wrapper {
+  position: sticky !important;
+  top: 110px !important;
+  align-self: flex-start !important;
+  width: 100%;
+  z-index: 5;
 }
 
 @media (max-width: 991px) {
@@ -2487,4 +2525,177 @@ video.gallery-img-bg,
     gap: 0.8rem !important;
     padding: 1.5rem 1rem !important;
   }
+}
+
+/* ==========================================================================
+   INTERACTIVE CONTENT-WISE SLIDER FOR SERVICE CARDS
+   Hovering or clicking automatically slides to the next photo
+   ========================================================================== */
+.service-slider-container {
+  position: relative !important;
+  width: 100% !important;
+  height: 240px !important;
+  min-height: 240px !important;
+  max-height: 240px !important;
+  overflow: hidden !important;
+  background: #141210 !important;
+  user-select: none !important;
+  cursor: pointer !important;
+}
+
+.service-slider-track {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.service-slider-container .service-slide-img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  opacity: 0 !important;
+  transform: translateX(100%) !important;
+  transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.55s ease !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+.service-slider-container .service-slide-img.active {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  pointer-events: auto !important;
+  z-index: 2 !important;
+}
+
+.service-slider-container .service-slide-img.prev-slide {
+  opacity: 0 !important;
+  transform: translateX(-100%) !important;
+  z-index: 1 !important;
+}
+
+/* Hover overlay and arrow controls */
+.slider-controls-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0 0.8rem !important;
+  pointer-events: none !important;
+  opacity: 0.85 !important;
+  transition: opacity 0.3s ease !important;
+  z-index: 3 !important;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.25) 100%) !important;
+}
+
+.service-feature-card:hover .slider-controls-overlay {
+  opacity: 1 !important;
+}
+
+.slider-arrow {
+  pointer-events: auto !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: rgba(20, 18, 16, 0.8) !important;
+  border: 1px solid rgba(205, 170, 124, 0.45) !important;
+  color: var(--color-gold, #cdaa7c) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.25rem !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.slider-arrow:hover {
+  background: var(--color-gold, #cdaa7c) !important;
+  color: #141210 !important;
+  transform: scale(1.12) !important;
+  border-color: #fff !important;
+}
+
+.slider-badge {
+  position: absolute !important;
+  bottom: 0.7rem !important;
+  right: 0.75rem !important;
+  background: rgba(18, 16, 14, 0.85) !important;
+  border: 1px solid rgba(205, 170, 124, 0.35) !important;
+  color: #e5ded2 !important;
+  font-family: var(--font-secondary, "Inter", sans-serif) !important;
+  font-size: 0.72rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px !important;
+  padding: 0.25rem 0.65rem !important;
+  border-radius: 20px !important;
+  backdrop-filter: blur(4px) !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+}
+
+.slider-badge .slide-num {
+  color: var(--color-gold, #cdaa7c) !important;
+  font-weight: 600 !important;
+}
+
+.slider-hint-pill {
+  position: absolute !important;
+  top: 0.65rem !important;
+  left: 0.75rem !important;
+  background: rgba(0, 0, 0, 0.65) !important;
+  border: 1px solid rgba(205, 170, 124, 0.3) !important;
+  color: #d6cfc5 !important;
+  font-size: 0.65rem !important;
+  letter-spacing: 0.8px !important;
+  text-transform: uppercase !important;
+  padding: 0.2rem 0.55rem !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(4px) !important;
+  pointer-events: none !important;
+  opacity: 0.85 !important;
+  z-index: 3 !important;
+}
+
+
+/* ==========================================================================
+   SACRED DEITY & PORTRAIT ALIGNMENT SAFEGUARDS
+   Ensures crowns, deities, kalashas, and portraits are never cut from above or below
+   ========================================================================== */
+.services-hero {
+  background-position: center 16% !important;
+  background-attachment: scroll !important;
+  background-size: cover !important;
+  min-height: 560px !important;
+  padding-top: 150px !important;
+  padding-bottom: 75px !important;
+}
+
+.about-hero-section {
+  background-position: center 36% !important;
+  background-attachment: scroll !important;
+  background-size: cover !important;
+  min-height: 560px !important;
+  padding-top: 150px !important;
+  padding-bottom: 75px !important;
+}
+
+.gallery-img-bg {
+  background-position: center 15% !important;
+}
+
+.service-slide-img {
+  object-position: center 15% !important;
+}
+
+.story-image-wrapper img {
+  object-position: center 10% !important;
 }

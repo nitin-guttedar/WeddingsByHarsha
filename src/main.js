@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVideoPerformanceOptimizer();
   initParallaxDestinations();
   initGalleryAndLightbox();
+  initServiceCardSliders();
   initContactForm();
   initElephantAnimation();
   registerServiceWorker();
@@ -594,6 +595,78 @@ function registerServiceWorker() {
       });
     });
   }
+}
+
+/* ==========================================================================
+   13. INTERACTIVE CONTENT-WISE SLIDER FOR SERVICE CARDS
+   Hovering or clicking automatically slides to the next photo
+   ========================================================================== */
+function initServiceCardSliders() {
+  const cards = document.querySelectorAll('.service-feature-card');
+
+  cards.forEach((card) => {
+    const container = card.querySelector('.service-slider-container');
+    if (!container) return;
+
+    const slides = container.querySelectorAll('.service-slide-img');
+    const badgeNum = container.querySelector('.slide-num');
+    if (slides.length <= 1) return;
+
+    let currentIndex = 0;
+    let hoverInterval = null;
+
+    function showSlide(index, direction = 'next') {
+      const prevIndex = currentIndex;
+      currentIndex = (index + slides.length) % slides.length;
+
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'prev-slide');
+        if (i === currentIndex) {
+          slide.classList.add('active');
+        } else if (i === prevIndex && direction === 'next') {
+          slide.classList.add('prev-slide');
+        }
+      });
+
+      if (badgeNum) {
+        badgeNum.textContent = (currentIndex + 1);
+      }
+    }
+
+    function nextSlide() {
+      showSlide(currentIndex + 1, 'next');
+    }
+
+    function prevSlide() {
+      showSlide(currentIndex - 1, 'prev');
+    }
+
+    // Advance automatically on mouse hover over card
+    card.addEventListener('mouseenter', () => {
+      if (hoverInterval) clearInterval(hoverInterval);
+      hoverInterval = setInterval(nextSlide, 2200);
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (hoverInterval) {
+        clearInterval(hoverInterval);
+        hoverInterval = null;
+      }
+    });
+
+    // Clicking anywhere on the slider container or arrows slides to next image
+    container.addEventListener('click', (e) => {
+      if (e.target.closest('.slider-prev')) {
+        e.stopPropagation();
+        e.preventDefault();
+        prevSlide();
+        return;
+      }
+      e.stopPropagation();
+      e.preventDefault();
+      nextSlide();
+    });
+  });
 }
 
 
