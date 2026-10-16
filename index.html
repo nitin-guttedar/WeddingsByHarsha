@@ -4141,12 +4141,12 @@
   <div id="lightbox-modal" class="lightbox-overlay" aria-hidden="true" role="dialog">
     <div class="lightbox-content" id="lightbox-content-box" style="position: relative; max-width: 900px; width: 95%;">
       <button class="lightbox-close" id="lightbox-close" aria-label="Close modal">×</button>
-      <div
-        style="width: 100%; max-height: 75vh; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 4px;">
+      <div id="lightbox-media-wrapper"
+        style="width: 100%; min-height: 420px; max-height: 75vh; background: #0c0b0a; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; border: 1px solid rgba(205, 170, 124, 0.35); box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85); position: relative;">
         <img src="" alt="" id="lightbox-img" class="lightbox-img"
-          style="display: none; max-height: 75vh; width: auto; object-fit: contain;" />
+          style="display: none; max-height: 75vh; max-width: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px;" />
         <video id="lightbox-video" class="lightbox-video-player" controls autoplay playsinline
-          style="display: none; max-height: 75vh; width: 100%;"></video>
+          style="display: none; max-height: 75vh; width: 100%; border-radius: 4px;"></video>
       </div>
       <div class="lightbox-caption" style="text-align: center; margin-top: 1.2rem;">
         <span class="lightbox-category" id="lightbox-category"

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
+    "build": "node scripts/sync_assets.cjs && vite build",
     "preview": "vite preview"
   },
   "engines": {

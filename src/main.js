@@ -390,14 +390,24 @@ function initGalleryAndLightbox() {
     });
   });
 
-  function openLightbox(type, src, title, category) {
+  function sanitizeMediaUrl(raw) {
+    if (!raw) return '';
+    let url = raw.trim().replace(/^['"]|['"]$/g, '');
+    try {
+      return encodeURI(decodeURI(url));
+    } catch {
+      return encodeURI(url);
+    }
+  }
+
+  function openLightbox(type, src, title, category, element) {
     if (!lightboxModal) return;
 
     if (type === 'video') {
       if (lightboxImg) lightboxImg.style.display = 'none';
       if (lightboxVideo) {
         lightboxVideo.style.display = 'block';
-        lightboxVideo.src = src;
+        lightboxVideo.src = sanitizeMediaUrl(src);
         lightboxVideo.muted = false;
         lightboxVideo.play().catch(() => {});
       }
@@ -409,7 +419,44 @@ function initGalleryAndLightbox() {
       }
       if (lightboxImg) {
         lightboxImg.style.display = 'block';
-        lightboxImg.src = src;
+
+        // 1. Resolve rendered background-image from element if available
+        let renderedBgUrl = '';
+        if (element) {
+          const bgEl = element.querySelector('.gallery-img-bg');
+          if (bgEl) {
+            const bgStyle = bgEl.style.backgroundImage || window.getComputedStyle(bgEl).backgroundImage;
+            if (bgStyle && bgStyle !== 'none') {
+              const m = bgStyle.match(/url\(['"]?(.*?)['"]?\)/);
+              if (m && m[1]) {
+                renderedBgUrl = sanitizeMediaUrl(m[1]);
+              }
+            }
+          }
+        }
+
+        const primary = renderedBgUrl || sanitizeMediaUrl(src);
+        const fallback = sanitizeMediaUrl(src);
+
+        // Smooth transition & fallback handling
+        lightboxImg.dataset.triedFallback = '';
+        lightboxImg.style.opacity = '0';
+        lightboxImg.style.transition = 'opacity 0.3s ease';
+
+        lightboxImg.onload = () => {
+          lightboxImg.style.opacity = '1';
+        };
+
+        lightboxImg.onerror = () => {
+          if (fallback && lightboxImg.src !== fallback && !lightboxImg.dataset.triedFallback) {
+            lightboxImg.dataset.triedFallback = 'true';
+            lightboxImg.src = fallback;
+          } else {
+            lightboxImg.style.opacity = '1';
+          }
+        };
+
+        lightboxImg.src = primary;
         lightboxImg.alt = title || 'Weddings by Harsha Portfolio';
       }
     }
@@ -428,8 +475,8 @@ function initGalleryAndLightbox() {
       const type = item.getAttribute('data-type') || 'image';
       const src = item.getAttribute('data-src');
       const title = item.getAttribute('data-title');
-      const category = item.getAttribute('data-cat-name');
-      openLightbox(type, src, title, category);
+      const category = item.getAttribute('data-cat-name') || item.getAttribute('data-category');
+      openLightbox(type, src, title, category, item);
     });
   });
 

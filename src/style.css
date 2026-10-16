@@ -2699,3 +2699,15 @@ video.gallery-img-bg,
 .story-image-wrapper img {
   object-position: center 10% !important;
 }
+
+/* Lightbox Media Container Responsive Styling */
+#lightbox-media-wrapper {
+  min-height: 440px;
+  background-color: #0c0b0a !important;
+}
+
+@media (max-width: 768px) {
+  #lightbox-media-wrapper {
+    min-height: 280px !important;
+  }
+}

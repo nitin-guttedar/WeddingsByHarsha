@@ -1,5 +1,5 @@
 // High-Performance Cache Service Worker for Weddings by Harsha
-const CACHE_NAME = 'wbharsha-cache-v1';
+const CACHE_NAME = 'wbharsha-cache-v2';
 
 // Static assets to pre-cache on service worker install
 const PRECACHE_ASSETS = [
