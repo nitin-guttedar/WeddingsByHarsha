@@ -457,12 +457,14 @@ function initGalleryAndLightbox() {
         };
 
         lightboxImg.src = primary;
-        lightboxImg.alt = title || 'Weddings by Harsha Portfolio';
+        lightboxImg.alt = 'Weddings by Harsha Portfolio';
+        lightboxImg.removeAttribute('title');
       }
     }
 
-    if (lightboxTitle) lightboxTitle.textContent = title || 'Weddings by Harsha Event';
-    if (lightboxCategory) lightboxCategory.textContent = category || 'Royal Portfolio';
+    if (lightboxVideo) lightboxVideo.removeAttribute('title');
+    if (lightboxTitle) lightboxTitle.textContent = '';
+    if (lightboxCategory) lightboxCategory.textContent = '';
 
     lightboxModal.classList.add('active');
     lightboxModal.setAttribute('aria-hidden', 'false');

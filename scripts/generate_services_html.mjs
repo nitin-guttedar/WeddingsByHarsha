@@ -41,7 +41,7 @@ const servicesData = [
       { src: '/assets/Engagement/WhatsApp Image 2026-10-15 at 8.57.57 AM (1).jpeg', alt: 'Rings Ceremony Intimate Couple Seating' },
       { src: '/assets/Engagement/WhatsApp Image 2026-10-15 at 8.57.57 AM (2).jpeg', alt: 'Floral Monogram & Romantic Backdrop Styling' },
       { src: '/assets/Engagement/WhatsApp Image 2026-10-15 at 8.57.58 AM.jpeg', alt: 'Contemporary Geometric Backdrop with Warm Lights' },
-      { src: '/assets/Engagement/WhatsApp Image 2026-10-15 at 8.57.58 AM (1).jpeg', alt: 'Festive Sangeet & Engagement Canopy Décor' },
+      { src: '/assets/Engagement/WhatsApp Image 2026-10-15 at 8.57.58 AM (1).jpeg', alt: 'Festive Sangeet & Engagement Canopy decor' },
       { src: '/assets/Engagement/WhatsApp Image 2026-10-15 at 8.57.58 AM (2).jpeg', alt: 'Shimmer Sequin & Floral Engagement Arch' },
       { src: '/assets/Engagement/WhatsApp Image 2026-10-15 at 8.57.59 AM.jpeg', alt: 'Exotic Orchid & Rose Engagement Photo Stage' }
     ]
@@ -96,7 +96,7 @@ const servicesData = [
       'Customized gift favors & traditional delicacies'
     ],
     images: [
-      { src: '/assets/BabyShower/WhatsApp Image 2026-10-15 at 8.58.06 AM.jpeg', alt: 'Royal Seemantha Floral Swing (Jhula) Décor' },
+      { src: '/assets/BabyShower/WhatsApp Image 2026-10-15 at 8.58.06 AM.jpeg', alt: 'Royal Seemantha Floral Swing (Jhula) decor' },
       { src: '/assets/BabyShower/WhatsApp Image 2026-10-15 at 8.58.06 AM (1).jpeg', alt: 'Gentle Pastel Seemantha Stage Backdrop' },
       { src: '/assets/BabyShower/WhatsApp Image 2026-10-15 at 8.58.06 AM (2).jpeg', alt: 'Traditional Oyyali Bangles Ceremony Seating' },
       { src: '/assets/BabyShower/WhatsApp Image 2026-10-15 at 8.58.06 AM (3).jpeg', alt: 'South Indian Baby Shower Blessing Backdrop' },

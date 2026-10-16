@@ -2703,11 +2703,28 @@ video.gallery-img-bg,
 /* Lightbox Media Container Responsive Styling */
 #lightbox-media-wrapper {
   min-height: 440px;
+  max-height: 85vh;
   background-color: #0c0b0a !important;
+}
+
+/* Lightbox: Completely remove titles and caption text on opening images */
+.lightbox-caption,
+#lightbox-title,
+#lightbox-category {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
 }
 
 @media (max-width: 768px) {
   #lightbox-media-wrapper {
     min-height: 280px !important;
+    max-height: 82vh !important;
   }
 }
+

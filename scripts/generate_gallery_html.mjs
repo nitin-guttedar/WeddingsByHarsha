@@ -78,7 +78,7 @@ const customTitles = {
   'WhatsApp Image 2026-10-15 at 8.57.57 AM (1).jpeg': 'Rings Ceremony Intimate Couple Seating',
   'WhatsApp Image 2026-10-15 at 8.57.57 AM (2).jpeg': 'Floral Monogram & Romantic Backdrop Styling',
   'WhatsApp Image 2026-10-15 at 8.57.58 AM.jpeg': 'Contemporary Geometric Backdrop with Warm Lights',
-  'WhatsApp Image 2026-10-15 at 8.57.58 AM (1).jpeg': 'Festive Sangeet & Engagement Canopy Décor',
+  'WhatsApp Image 2026-10-15 at 8.57.58 AM (1).jpeg': 'Festive Sangeet & Engagement Canopy decor',
   'WhatsApp Image 2026-10-15 at 8.57.58 AM (2).jpeg': 'Shimmer Sequin & Floral Engagement Arch',
   'WhatsApp Image 2026-10-15 at 8.57.59 AM.jpeg': 'Exotic Orchid & Rose Engagement Photo Stage',
 
@@ -115,7 +115,7 @@ const customTitles = {
   'IMG_9129.JPG.jpeg': 'Grand Welcome Corridor for Griha Pravesh',
   'WhatsApp Image 2026-10-15 at 8.58.00 AM.jpeg': 'Festive Floral Door Frame & Jasmine Drops',
   'WhatsApp Image 2026-10-15 at 8.58.00 AM (1).jpeg': 'Traditional Deity Altar Floral Garlands',
-  'WhatsApp Image 2026-10-15 at 8.58.01 AM (2).jpeg': 'Auspicious Home Entryway Floral Décor',
+  'WhatsApp Image 2026-10-15 at 8.58.01 AM (2).jpeg': 'Auspicious Home Entryway Floral decor',
   'WhatsApp Image 2026-10-15 at 8.58.02 AM.jpeg': 'Sacred Homa Kunda & Vedic Ritual Setup',
   'WhatsApp Image 2026-10-15 at 8.58.02 AM (1).jpeg': 'Intimate Home Interior Floral Garland Borders',
   'WhatsApp Image 2026-10-15 at 8.58.03 AM.jpeg': 'Handcrafted Fresh Flower Mandala Rangoli',
@@ -124,7 +124,7 @@ const customTitles = {
   'WhatsApp Image 2026-10-15 at 8.58.03 AM (3).jpeg': 'Traditional Banana Stem Entrance Guardians',
 
   // Baby Shower (Seemantha)
-  'WhatsApp Image 2026-10-15 at 8.58.06 AM.jpeg': 'Royal Seemantha Floral Swing (Jhula) Décor',
+  'WhatsApp Image 2026-10-15 at 8.58.06 AM.jpeg': 'Royal Seemantha Floral Swing (Jhula) decor',
   'WhatsApp Image 2026-10-15 at 8.58.06 AM (1).jpeg': 'Gentle Pastel Seemantha Stage Backdrop',
   'WhatsApp Image 2026-10-15 at 8.58.06 AM (2).jpeg': 'Traditional Oyyali Bangles Ceremony Seating',
   'WhatsApp Image 2026-10-15 at 8.58.06 AM (3).jpeg': 'South Indian Baby Shower Blessing Backdrop',
